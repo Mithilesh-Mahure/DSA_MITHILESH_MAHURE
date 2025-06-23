@@ -1,19 +1,18 @@
 class Solution {
 public:
-    void permute(vector<int> ip,vector<int> op,vector<vector<int>> &v){
-        if(ip.size()==0){
-            v.push_back(op);
+    void permute(vector<int> &s,int start,vector<vector<int>> &v){
+        if(start==s.size()-1){
+            v.push_back(s);
             return;
         }
         unordered_set<int> mp;
-        for(int i=0;i<ip.size();i++){
-            if(mp.find(ip[i])==mp.end()){
-                mp.insert(ip[i]);
-                vector<int> newIP(ip.begin(),ip.begin()+i);
-                newIP.insert(newIP.end(),ip.begin()+i+1,ip.end());
-                vector<int> newOP=op;
-                newOP.push_back(ip[i]);
-                permute(newIP,newOP,v);
+        for(int i=start;i<s.size();i++){
+            if(mp.find(s[i])==mp.end()){
+                mp.insert(s[i]);
+                swap(s[start],s[i]);
+                permute(s,start+1,v);
+                swap(s[start],s[i]);
+
             }
         }
     }
@@ -24,7 +23,7 @@ public:
             return v;
         }
 
-        permute(nums,{},v);
+        permute(nums,0,v);
         return v;
     }
 };
