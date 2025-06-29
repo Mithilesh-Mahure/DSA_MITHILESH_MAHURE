@@ -8,6 +8,23 @@ public:
             }
         }
     }
+    void bfs(vector<int> &visited,vector<vector<int>> &graph,int node){
+        queue<int> q;
+        q.push(node);
+        visited[node]=1;
+
+        while(!q.empty()){
+            int f=q.front();
+            q.pop();
+            for(int nbr:graph[f]){
+                if(!visited[nbr]){
+                    visited[nbr]=1;
+                    q.push(nbr);
+                }
+
+            }
+        }
+    }
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
         vector<int> visited(n);
         vector<vector<int>>graph(n);
@@ -16,7 +33,7 @@ public:
             graph[a].push_back(b);
             graph[b].push_back(a);
         }
-        dfs(visited,graph,source);
+        bfs(visited,graph,source);
         return visited[destination];
     }
 };
