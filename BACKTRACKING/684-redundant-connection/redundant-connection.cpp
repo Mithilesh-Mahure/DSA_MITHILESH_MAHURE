@@ -1,39 +1,45 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited,
-             int parent, vector<int>& ans) {
-        visited[node] = 1;
-        for (int nbr : graph[node]) {
-            if (!visited[nbr]) {
-                if (dfs(nbr, graph, visited, node, ans)) {
-                    return true;
+    bool bfs(int src, vector<vector<int>>& graph, vector<int>& visited) {
+        queue<pair<int, int>> q;
+        q.push({src, -1});
+        visited[src] = 1;
+
+        while (!q.empty()) {
+            int node = q.front().first;
+            int parent = q.front().second;
+            q.pop();
+
+            for (int nbr : graph[node]) {
+                if (!visited[nbr]) {
+                    visited[nbr] = 1;
+                    q.push({nbr, node});
+                } else if (nbr != parent) {
+                    return true; // cycle detected
                 }
-            } else if (nbr != parent) {
-                ans = {nbr, node};
-                return true;
             }
         }
+
         return false;
     }
 
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
         vector<vector<int>> graph(n + 1);
-        vector<int> visited(n + 1);
-        vector<int> ans = {0, 0};
 
         for (int i = 0; i < n; i++) {
-            int a = edges[i][0];
-            int b = edges[i][1];
-            graph[a].push_back(b);
-            graph[b].push_back(a);
+            int u = edges[i][0];
+            int v = edges[i][1];
 
-            fill(visited.begin(), visited.end(),0); // reset visited before each DFS
-            if (dfs(a, graph, visited, -1, ans)) {
-                return ans;
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+
+            vector<int> visited(n + 1, 0);
+            if (bfs(u, graph, visited)) {
+                return {u, v}; // the edge that caused the cycle
             }
         }
 
-        return ans;
+        return {};
     }
 };
