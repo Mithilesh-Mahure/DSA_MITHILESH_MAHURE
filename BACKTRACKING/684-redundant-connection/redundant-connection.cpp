@@ -1,6 +1,7 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, int parent, vector<int>& ans) {
+    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited,
+             int parent, vector<int>& ans) {
         visited[node] = 1;
         for (int nbr : graph[node]) {
             if (!visited[nbr]) {
@@ -8,7 +9,7 @@ public:
                     return true;
                 }
             } else if (nbr != parent) {
-                ans = {nbr,node};
+                ans = {nbr, node};
                 return true;
             }
         }
@@ -27,7 +28,7 @@ public:
             graph[a].push_back(b);
             graph[b].push_back(a);
 
-            fill(visited.begin(), visited.end(), 0); // reset visited before each DFS
+            fill(visited.begin(), visited.end(),0); // reset visited before each DFS
             if (dfs(a, graph, visited, -1, ans)) {
                 return ans;
             }
