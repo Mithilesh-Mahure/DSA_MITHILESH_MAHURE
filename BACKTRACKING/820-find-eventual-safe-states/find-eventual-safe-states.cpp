@@ -27,11 +27,9 @@ public:
         vector<int> visited(n, 0), currPath(n, 0), safe(n, 0);
 
         for (int i = 0; i < n; ++i) {
+            
             if (!visited[i]) {
-                // Within loop: we already have full vectors declared.
-                // If you still insist: we reinitialize single elements:
-                visited[i] = 0;
-                currPath[i] = 0;
+            
                 dfs(i, graph, visited, currPath, safe);
             }
         }
