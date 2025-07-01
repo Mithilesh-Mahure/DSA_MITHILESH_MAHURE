@@ -1,42 +1,36 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& currPath, vector<int>& safe) {
-        visited[node] = 1;
-        currPath[node] = 1;
-
-        for (int nbr : graph[node]) {
-            if (!visited[nbr]) {
-                if (dfs(nbr, graph, visited, currPath, safe)) {
-                    return true;  // cycle detected
+    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& curr, vector<int>& safe) {
+        visited[node]=1;
+        curr[node]=1;
+        for(auto nbr:graph[node]){
+            if(!visited[nbr]){
+                if (dfs(nbr, graph, visited, curr, safe)){
+                    return true;
                 }
-            } else if (currPath[nbr]) {
-                return true;  // back edge -> cycle
+            }else if(curr[nbr]){
+                return true;
             }
         }
-
-        // backtrack
-        currPath[node] = 0;
-        safe[node] = 1;  // node is safe
-        return false;  // no cycle found
+        curr[node]=0;
+        safe[node]=1;
+        return false;
     }
-
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> visited(n, 0);
-        vector<int> currPath(n, 0);
-        vector<int> safe(n, 0);
-        vector<int> result;
+        vector<int> visited(n, 0), curr(n, 0), safe(n, 0),res;
 
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             if (!visited[i]) {
-                dfs(i, graph, visited, currPath, safe);
+                dfs(i, graph, visited, curr, safe);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (safe[i]) {
+                res.push_back(i);
             }
         }
 
-        for (int i = 0; i < n; ++i) {
-            if (safe[i]) result.push_back(i);
-        }
-
-        return result;
+        return res;
     }
 };
