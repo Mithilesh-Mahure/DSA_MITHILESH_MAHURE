@@ -1,16 +1,16 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& currPath, vector<int>& safe, vector<int>& unsafe) {
+    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& currPath, vector<int>& safe) {
         visited[node] = 1;
         currPath[node] = 1;
 
         for (int nbr : graph[node]) {
             if (!visited[nbr]) {
-                if (dfs(nbr, graph, visited, currPath, safe ,unsafe)) {
-                    return true;  
+                if (dfs(nbr, graph, visited, currPath, safe)) {
+                    return true;  // cycle found
                 }
             } else if (currPath[nbr]) {
-                return true;  
+                return true;  // back edge -> cycle
             }
         }
 
@@ -23,15 +23,16 @@ public:
         int n = graph.size();
         vector<int> result;
 
-        vector<int> visited(n, 0), currPath(n, 0), safe(n, 0), unsafe(n, 0);
+        // Declare all 3 tracking vectors within the loop for first-time initialization
+        vector<int> visited(n, 0), currPath(n, 0), safe(n, 0);
 
         for (int i = 0; i < n; ++i) {
-            if(unsafe[i]) continue;
             if (!visited[i]) {
-                dfs(i, graph, visited, currPath, safe, unsafe);
-            }
-            for (int i = 0; i < n; ++i) {
-                if (currPath[i]) unsafe[i]=1;
+                // Within loop: we already have full vectors declared.
+                // If you still insist: we reinitialize single elements:
+                visited[i] = 0;
+                currPath[i] = 0;
+                dfs(i, graph, visited, currPath, safe);
             }
         }
 
