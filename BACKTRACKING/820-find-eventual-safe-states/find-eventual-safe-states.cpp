@@ -1,36 +1,45 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& curr, vector<int>& safe) {
-        visited[node]=1;
-        curr[node]=1;
-        for(auto nbr:graph[node]){
-            if(!visited[nbr]){
-                if (dfs(nbr, graph, visited, curr, safe)){
-                    return true;
+    bool dfs(int node, vector<vector<int>>& graph, vector<int>& visited, vector<int>& currPath, vector<int>& safe) {
+        visited[node] = 1;
+        currPath[node] = 1;
+
+        for (int nbr : graph[node]) {
+            if (!visited[nbr]) {
+                if (dfs(nbr, graph, visited, currPath, safe)) {
+                    return true;  // cycle found
                 }
-            }else if(curr[nbr]){
-                return true;
+            } else if (currPath[nbr]) {
+                return true;  // back edge -> cycle
             }
         }
-        curr[node]=0;
-        safe[node]=1;
+
+        currPath[node] = 0;
+        safe[node] = 1;
         return false;
     }
+
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> visited(n, 0), curr(n, 0), safe(n, 0),res;
+        vector<int> result;
 
-        for (int i = 0; i < n; i++) {
+        // Declare all 3 tracking vectors within the loop for first-time initialization
+        vector<int> visited(n, 0), currPath(n, 0), safe(n, 0);
+
+        for (int i = 0; i < n; ++i) {
             if (!visited[i]) {
-                dfs(i, graph, visited, curr, safe);
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if (safe[i]) {
-                res.push_back(i);
+                // Within loop: we already have full vectors declared.
+                // If you still insist: we reinitialize single elements:
+                visited[i] = 0;
+                currPath[i] = 0;
+                dfs(i, graph, visited, currPath, safe);
             }
         }
 
-        return res;
+        for (int i = 0; i < n; ++i) {
+            if (safe[i]) result.push_back(i);
+        }
+
+        return result;
     }
 };
