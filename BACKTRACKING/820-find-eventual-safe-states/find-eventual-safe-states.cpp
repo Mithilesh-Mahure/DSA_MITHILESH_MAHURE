@@ -27,9 +27,10 @@ public:
         vector<int> visited(n, 0), currPath(n, 0), safe(n, 0);
 
         for (int i = 0; i < n; ++i) {
-            
+            if(currPath[i]==1){
+                continue;
+            }
             if (!visited[i]) {
-            
                 dfs(i, graph, visited, currPath, safe);
             }
         }
