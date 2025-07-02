@@ -7,9 +7,7 @@ public:
             for(int j=0;j<=i;j++){
                 if(j==0 || j==i)row.push_back(1);
                 else{
-                    int no=0;
-                    no=res[i-1][j-1]+res[i-1][j];
-                    row.push_back(no);
+                    row.push_back(res[i-1][j-1]+res[i-1][j]);
                 }
             }
             res.push_back(row);
