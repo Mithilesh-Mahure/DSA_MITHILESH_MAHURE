@@ -34,9 +34,7 @@ public:
         int ans=0;
         for (int i = 0; i < r; i++) {
             for (int j = 0; j < c; j++) {
-                if(board[i][j]==2){
-                    board[i][j]=1;
-                } else if(board[i][j]==1) ans++;
+                if(board[i][j]==1) ans++;
             }
         }
         return ans;
