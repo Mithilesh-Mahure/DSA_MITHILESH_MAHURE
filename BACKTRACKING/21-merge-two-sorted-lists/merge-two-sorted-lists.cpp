@@ -27,10 +27,7 @@ public:
             curr=curr->next;
         }
         curr->next=list1?list1:list2;
-
-        ListNode* head=res->next;
-        delete res;
-        return head;
+        return res->next;
 
     }
 };
